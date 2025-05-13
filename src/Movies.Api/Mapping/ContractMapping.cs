@@ -59,4 +59,26 @@ public static class ContractMapping
             MovieId = x.MovieId
         });
     }
+
+    public static GetAllMoviesOptions MapToOptions(this GetAllMoviesRequest request)
+    {
+        return new GetAllMoviesOptions
+        {
+            Title = request.Title,
+            YearOfRelease = request.Year,
+            SortField = request.SortBy?.Trim('+', '-'),
+            SortOrder = request.SortBy is null ? SortOrder.Unsorted :
+                request.SortBy.StartsWith('-') ? SortOrder.Descending : SortOrder.Ascending,
+            Page = request.Page,
+            PageSize = request.PageSize
+        };
+    }
+
+    public static GetAllMoviesOptions WithUser(this GetAllMoviesOptions options,
+        Guid? userId)
+    {
+        options.UserId = userId;
+        return options;
+    }
+
 }
